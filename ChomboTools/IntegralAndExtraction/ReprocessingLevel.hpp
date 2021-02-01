@@ -6,8 +6,12 @@
 #ifndef REPROCESSINGLEVEL_HPP_
 #define REPROCESSINGLEVEL_HPP_
 
-#include "CustomExtraction.hpp"
+#include "AMRReductions.hpp"
+#include "BoxLoops.hpp"
+#include "ExcisionDiagnostics.hpp"
+#include "ForceExtraction.hpp"
 #include "GRAMRLevel.hpp"
+#include "SmallDataIO.hpp"
 
 class ReprocessingLevel : public GRAMRLevel
 {
@@ -26,10 +30,35 @@ class ReprocessingLevel : public GRAMRLevel
         pout() << "The time is " << m_time << " on level " << m_level
                << ". Your wish is my command." << endl;
 
-        // as an example, on the coarsest level do a simple extraction
-        // (NB will still take data from finest level which covers the points)
+        // calculate the density of the PF, but excise the BH region completely
+        fillAllGhosts();
+        // excise within horizon
+        BoxLoops::loop(
+            ExcisionDiagnostics(m_dx, m_p.center, m_p.inner_r, m_p.outer_r),
+            m_state_new, m_state_new, SKIP_GHOST_CELLS, disable_simd());
+
+        // write out the integral after each coarse timestep
         if (m_level == 0)
         {
+            // integrate the densities and write to a file
+            AMRReductions<VariableType::evolution> amr_reductions(m_gr_amr);
+            double source_sum = amr_reductions.sum(c_Source);
+            double rho_sum = amr_reductions.sum(c_rho);
+
+            SmallDataIO integral_file("IntegralData", m_dt, m_time,
+                                      m_restart_time, SmallDataIO::APPEND,
+                                      false);
+            // remove any duplicate data if this is post restart
+            integral_file.remove_duplicate_time_data();
+            std::vector<double> data_for_writing = {source_sum, rho_sum};
+            // write data
+            if (m_time == 0.0)
+            {
+                integral_file.write_header_line({"Source", "rho"});
+            }
+            integral_file.write_time_data_line(data_for_writing);
+
+            // Now refresh the interpolator and do the interpolation
             // set up an interpolator
             // pass the boundary params so that we can use symmetries if
             // applicable
@@ -40,12 +69,9 @@ class ReprocessingLevel : public GRAMRLevel
             // this should fill all ghosts including the boundary ones according
             // to the conditions set in params.txt
             interpolator.refresh();
-
-            // set up the query and execute it
-            int num_points = 4;
-            CustomExtraction extraction(c_chi, num_points, m_p.L, m_p.center,
-                                        m_dt, m_time);
-            extraction.execute_query(&interpolator, "outputs");
+            ForceExtraction my_extraction(m_p.extraction_params, m_dt, m_time,
+                                          m_restart_time);
+            my_extraction.execute_query(&interpolator);
         }
     }
 

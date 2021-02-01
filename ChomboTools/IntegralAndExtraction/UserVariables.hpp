@@ -17,14 +17,16 @@
 // as evolution ones since we use the checkpoint restart feature
 enum
 {
-    c_chi,
+    c_phi_Re,
     c_rho,
+    c_Source,
     NUM_VARS
 };
 
 namespace UserVariables
 {
-static const std::array<std::string, NUM_VARS> variable_names = {"chi", "rho"};
+static const std::array<std::string, NUM_VARS> variable_names = {
+    "phi_Re", "rho", "Source"};
 }
 
 #include "UserVariables.inc.hpp"
