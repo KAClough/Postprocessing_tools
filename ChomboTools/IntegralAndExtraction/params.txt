@@ -4,7 +4,7 @@ N2 = 64
 N3 = 64
 L = 512
 max_level = 6 # There are (max_level+1) grids, so min is zero
-verbosity = 1
+verbosity = 0
 
 # For read in of files
 # note that this may actually be your plot_prefix if you are reprocessing plot files

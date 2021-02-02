@@ -38,7 +38,7 @@ class ReprocessingLevel : public GRAMRLevel
             m_state_new, m_state_new, SKIP_GHOST_CELLS, disable_simd());
 
         // write out the integral after each coarse timestep
-        if (m_level == 0)
+        if (m_level == m_p.max_level)
         {
             // integrate the densities and write to a file
             AMRReductions<VariableType::evolution> amr_reductions(m_gr_amr);
@@ -62,16 +62,16 @@ class ReprocessingLevel : public GRAMRLevel
             // set up an interpolator
             // pass the boundary params so that we can use symmetries if
             // applicable
-            AMRInterpolator<Lagrange<4>> interpolator(
-                m_gr_amr, m_p.origin, m_p.dx, m_p.boundary_params,
-                m_p.verbosity);
+//            AMRInterpolator<Lagrange<4>> interpolator(
+//                m_gr_amr, m_p.origin, m_p.dx, m_p.boundary_params,
+//                m_p.verbosity);
 
             // this should fill all ghosts including the boundary ones according
             // to the conditions set in params.txt
-            interpolator.refresh();
-            ForceExtraction my_extraction(m_p.extraction_params, m_dt, m_time,
-                                          m_restart_time);
-            my_extraction.execute_query(&interpolator);
+//            interpolator.refresh();
+//            ForceExtraction my_extraction(m_p.extraction_params, m_dt, m_time,
+//                                          m_restart_time);
+//            my_extraction.execute_query(&interpolator);
         }
     }
 
