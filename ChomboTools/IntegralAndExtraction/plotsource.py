@@ -8,28 +8,43 @@ import matplotlib.pyplot as plt;
 M = 1.0
 mu = 0.5
 v = 0.1
-r = 100
+r = 500
 symmetry = 4
-data1 = np.loadtxt("IntegralData.dat")
-data2 = np.loadtxt("IntegralData100.dat")
 
 # make the plot
 fig = plt.figure()
 
-labelstring = "r=100"
-timedata = data1[:,0]
-Fdata = symmetry * data1[:,1] * 0.1 * 0.1
+data = np.loadtxt("Run3/IntegralData.dat")
+labelstring = "r_max = 500, v=0.3"
+timedata = data[:,0]
+Fdata = symmetry * data[:,1]
 plt.plot(timedata, Fdata, '-', lw = 1.0, label=labelstring)
 
-dina = np.ones_like(timedata)*1.2
-plt.plot(timedata, dina, '--', lw = 1.0, label=labelstring)
+#data = np.loadtxt("Run4/IntegralData.dat")
+#labelstring = "r_max = 500, v=0.4"
+#timedata = data[:,0]
+#Fdata = symmetry * data[:,1]
+#plt.plot(timedata, Fdata, '-', lw = 1.0, label=labelstring)
+
+#data = np.loadtxt("Run5/IntegralData.dat")
+#labelstring = "r_max = 500, v=0.5"
+#timedata = data[:,0]
+#Fdata = symmetry * data[:,1]
+#plt.plot(timedata, Fdata, '-', lw = 1.0, label=labelstring)
+
+data = np.loadtxt("Run6/IntegralData.dat")
+labelstring = "r_max = 500, v=0.6"
+timedata = data[:,0]
+Fdata = symmetry * data[:,1]
+plt.plot(timedata, Fdata, '-', lw = 1.0, label=labelstring)
 
 # make the plot look nice
 plt.xlabel("time")
 plt.ylabel("Force")
 #plt.xlim(0, 1000)
 #plt.ylim(1e-1, 1e2)
-plt.legend()
+plt.legend(loc=4)
+plt.grid()
 
 # save as png image
 filename = "FvsT" + "_mu" + str(mu) + ".png"

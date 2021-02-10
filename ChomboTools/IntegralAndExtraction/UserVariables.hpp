@@ -15,18 +15,17 @@
 // in which you added them to the plot files, so this may not match your ACTUAL
 // UserVariables.hpp file. For the purposes of this tool, all vars are treated
 // as evolution ones since we use the checkpoint restart feature
-enum
-{
-    c_phi_Re,
-    c_rho,
-    c_Source,
-    NUM_VARS
+enum {
+  //    c_rho,
+  c_xMom,
+  c_Source,
+  c_Stress,
+  NUM_VARS
 };
 
-namespace UserVariables
-{
+namespace UserVariables {
 static const std::array<std::string, NUM_VARS> variable_names = {
-    "phi_Re", "rho", "Source"};
+    "xMom", "Source", "Stress"};
 }
 
 #include "UserVariables.inc.hpp"

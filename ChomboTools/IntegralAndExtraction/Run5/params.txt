@@ -9,8 +9,8 @@ verbosity = 0
 # For read in of files
 # note that this may actually be your plot_prefix if you are reprocessing plot files
 # (we want to trick Chombo into thinking these are checkpoints for restart)
-chk_prefix = /home/dc-cui1/rds/rds-dirac-dp131/dc-cui1/Boost/Boost3_plt
-restart_file = /home/dc-cui1/rds/rds-dirac-dp131/dc-cui1/Boost/Boost3_plt000000.3d.hdf5
+chk_prefix = /home/dc-cui1/rds/rds-dirac-dp131/dc-cui1/Boost/Boost5_plt
+restart_file = /home/dc-cui1/rds/rds-dirac-dp131/dc-cui1/Boost/Boost5_plt000000.3d.hdf5
 # what is the interval in the files you want to reprocess, and how many?
 checkpoint_interval = 10
 start_file = 0
@@ -36,11 +36,11 @@ lo_boundary = 3 2 2
 vars_parity = 0 0 0 0 # one for each var in the UserVariables file
 extrapolation_order = 1
 
-inner_r = 5.5
+inner_r = 2.0
 outer_r = 500.0
 
 # for extraction
-activate_extraction = 0
+activate_extraction = 1
 write_extraction = 0
 num_points_phi = 36
 num_points_t = 24
